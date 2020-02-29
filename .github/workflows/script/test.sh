@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 runner_os=$1
 
 [ "$runner_os" == "" ] && exit 1
@@ -23,8 +25,11 @@ elif [ "$runner_os" == "macOS" ]; then
     cmake_dir="cmake-${cmake_version}-Darwin-x86_64/CMake.app/Contents/bin"
 fi
 
-wget -qO- "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-${ninja_suffix}" | bsdtar -xf-
-wget -qO- "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-${cmake_suffix}" | bsdtar -xf-
+curl -LO "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-${ninja_suffix}"
+cmake -E tar xf "./ninja-${ninja_suffix}"
+
+curl -LO "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-${cmake_suffix}"
+cmake -E tar xf "./cmake-${cmake_version}-${cmake_suffix}"
 
 # Save the path for other steps
 echo $GITHUB_WORKSPACE/$cmake_dir > cmake_dir
