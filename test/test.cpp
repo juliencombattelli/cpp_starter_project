@@ -5,10 +5,10 @@
 // NOLINTNEXTLINE
 TEST(MyProject, Factorial)
 {
-    EXPECT_EQ(math::factorial(1), 1);
-    EXPECT_EQ(math::factorial(2), 2);
-    EXPECT_EQ(math::factorial(3), 6);
-    EXPECT_EQ(math::factorial(10), 3628800);
+    EXPECT_EQ(math::factorial(1U), 1U);
+    EXPECT_EQ(math::factorial(2U), 2U);
+    EXPECT_EQ(math::factorial(3U), 6U);
+    EXPECT_EQ(math::factorial(10U), 3628800U);
 }
 
 int main(int argc, char** argv)
