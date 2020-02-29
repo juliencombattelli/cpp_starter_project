@@ -58,8 +58,7 @@ jobs:
         & "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
         ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake `
             -S . -B build `
-            -D CMAKE_BUILD_TYPE=${{ matrix.config.build_type }} `
-            -G Ninja -D CMAKE_MAKE_PROGRAM=${GITHUB_WORKSPACE}/ninja 
+            -D CMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
 
     - name: Configure
       id: configure_others
