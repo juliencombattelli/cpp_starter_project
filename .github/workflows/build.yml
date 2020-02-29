@@ -49,7 +49,21 @@ jobs:
       run: ./.github/workflows/script/download_cmake_ninja.sh ${{ runner.os }}
       
     - name: Configure
-      shell: bash
+      id: configure_windows
+      if: runner.os == 'Windows'
+      env:
+        CC: ${{ matrix.config.cc }}
+        CXX: ${{ matrix.config.cxx }}
+      run: |
+        & C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat
+        ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake `
+            -S . -B build `
+            -D CMAKE_BUILD_TYPE=${{ matrix.config.build_type }} `
+            -G Ninja -D CMAKE_MAKE_PROGRAM=${GITHUB_WORKSPACE}/ninja 
+
+    - name: Configure
+      id: configure_others
+      if: runner.os != 'Windows'
       env:
         CC: ${{ matrix.config.cc }}
         CXX: ${{ matrix.config.cxx }}
@@ -57,7 +71,7 @@ jobs:
         ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake \
             -S . -B build \
             -D CMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-            -G Ninja -D CMAKE_MAKE_PROGRAM=${GITHUB_WORKSPACE//\\//}/ninja 
+            -G Ninja -D CMAKE_MAKE_PROGRAM=${GITHUB_WORKSPACE//\\//}/ninja
 
     - name: Build
       shell: cmake -P {0}
