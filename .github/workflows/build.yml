@@ -78,7 +78,9 @@ jobs:
         endif()
 
     - name: Download Conan
-      run: pip install conan
+      run: |
+        pip install conan
+        echo $PATH
       
     - name: Configure
       shell: cmake -P {0}
