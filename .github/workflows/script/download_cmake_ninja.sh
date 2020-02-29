@@ -32,7 +32,8 @@ curl -LO "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/c
 cmake -E tar xf "./cmake-${cmake_version}-${cmake_suffix}"
 
 # Save the path for other steps
-echo $GITHUB_WORKSPACE/$cmake_dir > cmake_dir
+cmake_dir=$GITHUB_WORKSPACE/$cmake_dir
+echo "::set-output name=cmake_dir::${cmake_dir}"
 
 if [ "$runner_os" != "Windows" ]; then
     chmod +x ninja
