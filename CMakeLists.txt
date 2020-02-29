@@ -51,3 +51,15 @@ target_link_libraries(intro
         project_options project_warnings
         CONAN_PKG::fmt CONAN_PKG::spdlog
 )
+
+install(TARGETS intro
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
+
+install(TARGETS math
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
