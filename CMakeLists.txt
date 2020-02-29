@@ -1,58 +1,53 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16)
+project(myproject)
 
-# Set the project name to your project name, my project isn't very descriptive
-project(myproject CXX)
-include(cmake/StandardProjectSettings.cmake)
+option(ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
+option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
+option(ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
+option(ENABLE_IPO "Enable Iterprocedural Optimization, aka Link Time Optimization (LTO)" OFF)
+option(ENABLE_PCH "Enable Precompiled Headers" OFF)
+option(ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
+option(ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+option(ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" OFF)
+option(ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
+option(ENABLE_TESTING "Enable Test Builds" ON)
+option(EXTRA_GCC_WARNINGS "Add extra GCC warnings not supported by Clang" OFF)
+option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" ON)
 
-# Link this 'library' to set the c++ standard / compile-time options requested
-add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_17)
-
-# Link this 'library' to use the warnings specified in CompilerWarnings.cmake
-add_library(project_warnings INTERFACE)
-
-# standard compiler warnings
+include(cmake/ProjectSettings.cmake)
 include(cmake/CompilerWarnings.cmake)
-set_project_warnings(project_warnings)
-
-# sanitizer options if supported by compiler
+include(cmake/PrecompiledHeaders.cmake)
 include(cmake/Sanitizers.cmake)
-enable_sanitizers(project_options)
-
-# enable doxygen
+include(cmake/StaticAnalyzers.cmake)
 include(cmake/Doxygen.cmake)
+include(cmake/Conan.cmake)
+
 enable_doxygen()
 
-# allow for static analysis options
-include(cmake/StaticAnalyzers.cmake)
+add_library(project_warnings INTERFACE)
+set_project_warnings(project_warnings)
 
-option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
-option(ENABLE_TESTING "Enable Test Builds" ON)
+add_library(project_options INTERFACE)
+target_compile_features(project_options INTERFACE cxx_std_17)
+enable_sanitizers(project_options)
+enable_precompiled_headers(project_options)
 
-# Very basic PCH example
-option(ENABLE_PCH "Enable Precompiled Headers" OFF)
-if (ENABLE_PCH)
-  # This sets a global PCH parameter, each project will build its own PCH, which
-  # is a good idea if any #define's change
-  # 
-  # 
-  target_precompile_headers(project_options INTERFACE <vector> <string> <map> <utility>)
+if (ENABLE_TESTING)
+    enable_testing()
+    include(GoogleTest)
+    add_subdirectory(test)
 endif()
 
-if(ENABLE_TESTING)
-  enable_testing()
-  message(
-    "Building Tests. Be sure to check out test/constexpr_tests for constexpr testing"
-  )
-  add_subdirectory(test)
-endif()
+add_library(math src/Math/Factorial.cpp)
+target_include_directories(math PUBLIC include)
+target_link_libraries(math 
+    PRIVATE 
+        project_options project_warnings
+)
 
-if(ENABLE_FUZZING)
-  message(
-    "Building Fuzz Tests, using fuzzing sanitizer https://www.llvm.org/docs/LibFuzzer.html"
-  )
-  add_subdirectory(fuzz_test)
-endif()
-
-
-add_subdirectory(src)
+add_executable(intro src/main.cpp)
+target_link_libraries(intro 
+    PRIVATE 
+        project_options project_warnings
+        CONAN_PKG::fmt CONAN_PKG::spdlog
+)
