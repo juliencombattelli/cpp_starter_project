@@ -79,7 +79,7 @@ jobs:
 
     - name: Download Conan
       run: |
-        pip install conan
+        pip3 install conan
         echo $PATH
       
     - name: Configure
