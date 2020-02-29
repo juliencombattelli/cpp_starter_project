@@ -12,7 +12,8 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - name: prepare
-              run: mkdir build
+              run: pip install --user conan cmake
+                   mkdir build
             - name: configure
               run: cmake ..
               working-directory: build
