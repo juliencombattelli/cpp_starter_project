@@ -24,7 +24,8 @@ jobs:
             compiler: cl
           - os: windows-latest
             name: Windows MinGW
-            compiler: gcc           
+            compiler: gcc
+            extra-cmake-args: '-G "MinGW Makefiles"'          
         build_type: [Debug, Release]
     
     name: ${{ matrix.config.name }} - ${{ matrix.build_type }}
@@ -59,7 +60,7 @@ jobs:
             print("::set-env name=CXX::g++")
         
       - name: Configure
-        run: cmake -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}      
+        run: cmake ${{ extra-cmake-args }} -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}      
 
       - name: Build
         run: cmake --build build --config ${{ matrix.build_type }}
