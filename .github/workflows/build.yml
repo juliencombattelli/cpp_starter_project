@@ -147,7 +147,7 @@ jobs:
   release:
     if: contains(github.ref, 'tags/v')
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build-posix, build-windows]
 
     steps:
       - name: Create Release
