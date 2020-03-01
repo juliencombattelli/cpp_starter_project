@@ -13,19 +13,23 @@ jobs:
           - os: ubuntu-latest
             name: Ubuntu GCC
             compiler: gcc
+            extra_cmake_args: ''
           - os: ubuntu-latest
             name: Ubuntu Clang
             compiler: clang
+            extra_cmake_args: ''
           - os: macos-latest
             name: MacOS Clang
             compiler: clang
+            extra_cmake_args: ''
           - os: windows-latest
             name: Windows MSVC
             compiler: cl
+            extra_cmake_args: ''
           - os: windows-latest
             name: Windows MinGW
             compiler: gcc
-            extra_cmake_args: -G "MinGW Makefiles"
+            extra_cmake_args: '-G "MinGW Makefiles"'
         build_type: [Debug, Release]
     
     name: ${{ matrix.config.name }} - ${{ matrix.build_type }}
