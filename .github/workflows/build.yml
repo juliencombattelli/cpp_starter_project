@@ -11,6 +11,15 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
         build_type: [Debug, Release]
+        include:
+          # Windows MinGW build
+          - os: windows-latest
+            cc: gcc
+            cxx: g++
+          # Windows MSVC build
+          - os: windows-latest
+            cc: cl
+            cxx: cl
     
     runs-on: ${{ matrix.os }}
 
@@ -29,6 +38,9 @@ jobs:
           pip install conan cmake
           
       - name: Configure
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
         run: cmake -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}      
 
       - name: Build
