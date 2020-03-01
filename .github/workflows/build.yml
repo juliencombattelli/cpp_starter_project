@@ -11,14 +11,20 @@ jobs:
       matrix:
         config:
           - os: ubuntu-latest
+            name: Ubuntu GCC
             compiler: gcc
           - os: macos-latest
+            name: MacOS Clang
             compiler: clang
           - os: windows-latest
+            name: Windows MSVC
             compiler: cl
           - os: windows-latest
+            name: Windows MinGW
             compiler: gcc           
         build_type: [Debug, Release]
+    
+    name: ${{matrix.config.name }} - ${{ matrix.build_type }}
     
     runs-on: ${{ matrix.config.os }}
 
@@ -37,18 +43,17 @@ jobs:
           pip install conan cmake
           
       - name: Preconfigure
-        shell: bash
+        shell: python
         run: |
-          if [ "${{ matrix.config.compiler }}" = "cl" ]; then
-            echo "::set-env name=CC::cl"
-            echo "::set-env name=CXX::cl"
-          elif [ "${{ matrix.config.compiler }}" = "clang" ]; then
-            echo "::set-env name=CC::clang"
-            echo "::set-env name=CXX::clang++"
-          else # gcc
-            echo "::set-env name=CC::gcc"
-            echo "::set-env name=CXX::g++"
-          fi
+          if compiler == "cl":
+            print("::set-env name=CC::cl")
+            print("::set-env name=CXX::cl")
+          elif compiler == "clang":
+            print("::set-env name=CC::clang")
+            print("::set-env name=CXX::clang++")
+          else: # gcc
+            print("::set-env name=CC::gcc")
+            print("::set-env name=CXX::g++")
         
       - name: Configure
         run: cmake -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}      
