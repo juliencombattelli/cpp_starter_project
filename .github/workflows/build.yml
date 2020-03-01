@@ -13,6 +13,9 @@ jobs:
           - os: ubuntu-latest
             name: Ubuntu GCC
             compiler: gcc
+          - os: ubuntu-latest
+            name: Ubuntu Clang
+            compiler: clang
           - os: macos-latest
             name: MacOS Clang
             compiler: clang
