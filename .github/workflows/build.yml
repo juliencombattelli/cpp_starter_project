@@ -24,7 +24,7 @@ jobs:
             compiler: gcc           
         build_type: [Debug, Release]
     
-    name: ${{matrix.config.name }} - ${{ matrix.build_type }}
+    name: ${{ matrix.config.name }} - ${{ matrix.build_type }}
     
     runs-on: ${{ matrix.config.os }}
 
@@ -45,10 +45,10 @@ jobs:
       - name: Preconfigure
         shell: python
         run: |
-          if compiler == "cl":
+          if ${{ matrix.config.compiler }} == "cl":
             print("::set-env name=CC::cl")
             print("::set-env name=CXX::cl")
-          elif compiler == "clang":
+          elif ${{ matrix.config.compiler }} == "clang":
             print("::set-env name=CC::clang")
             print("::set-env name=CXX::clang++")
           else: # gcc
