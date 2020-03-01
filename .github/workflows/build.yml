@@ -13,8 +13,7 @@ jobs:
         build_type: [Debug, Release]
     
     runs-on: ${{ matrix.os }}
-    env:
-      ARTIFACT_NAME: ${{ matrix.os }}-${{ matrix.build_type }}.tar.gz
+
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
@@ -44,13 +43,13 @@ jobs:
 
       - name: Pack
         working-directory: instdir
-        run: cmake -E tar czf ../$ARTIFACT_NAME .
+        run: cmake -E tar cvf ../${{ matrix.os }}-${{ matrix.build_type }}.zip --format=zip .
 
       - name: Upload
         uses: actions/upload-artifact@v1
         with:
-          path: ./${{ env.ARTIFACT_NAME }}
-          name: ${{ env.ARTIFACT_NAME }}
+          path: ./${{ matrix.os }}-${{ matrix.build_type }}.zip
+          name: ${{ matrix.os }}-${{ matrix.build_type }}.zip
 
   release:
     if: contains(github.ref, 'tags/v')
@@ -87,13 +86,11 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
         build_type: [Debug, Release]
     needs: release
-    env:
-      ARTIFACT_NAME: ${{ matrix.os }}-${{ matrix.build_type }}.tar.gz
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v1
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{ matrix.os }}-${{ matrix.build_type }}.zip
           path: ./
 
       - name: Download URL
@@ -113,6 +110,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-          asset_path: ./${{ env.ARTIFACT_NAME }}
-          asset_name: ${{ env.ARTIFACT_NAME }}
+          asset_path: ./${{ matrix.os }}-${{ matrix.build_type }}.zip
+          asset_name: ${{ matrix.os }}-${{ matrix.build_type }}.zip
           asset_content_type: application/x-gtar
