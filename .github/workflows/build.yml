@@ -48,8 +48,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v1
         with:
-          path: ./${{ matrix.os }}-${{ matrix.build_type }}.zip
-          name: ${{ matrix.os }}-${{ matrix.build_type }}.zip
+          path: ./instdir
+          name: ${{ matrix.os }}-${{ matrix.build_type }}
 
   release:
     if: contains(github.ref, 'tags/v')
@@ -90,7 +90,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v1
         with:
-          name: ${{ matrix.os }}-${{ matrix.build_type }}.zip
+          name: ${{ matrix.os }}-${{ matrix.build_type }}
           path: ./
 
       - name: Download URL
@@ -110,6 +110,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-          asset_path: ./${{ matrix.os }}-${{ matrix.build_type }}.zip
-          asset_name: ${{ matrix.os }}-${{ matrix.build_type }}.zip
+          asset_path: ./${{ matrix.os }}-${{ matrix.build_type }}
+          asset_name: ${{ matrix.os }}-${{ matrix.build_type }}
           asset_content_type: application/x-gtar
