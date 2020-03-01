@@ -9,19 +9,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        config:
+          - os: ubuntu-latest
+            compiler: gcc
+          - os: macos-latest
+            compiler: clang
+          - os: windows-latest
+            compiler: cl
+          - os: windows-latest
+            compiler: gcc           
         build_type: [Debug, Release]
-        include:
-          # Windows MinGW build
-          - os: windows-latest
-            cc: gcc
-            cxx: g++
-          # Windows MSVC build
-          - os: windows-latest
-            cc: cl
-            cxx: cl
     
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.config.os }}
 
     steps:
       - name: Checkout project
@@ -37,10 +36,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install conan cmake
           
+      - name: Preconfigure
+        shell: bash
+        run: |
+          if [ "${{ matrix.config.compiler }}" = "cl" ]; then
+            echo "::set-env name=CC::cl"
+            echo "::set-env name=CXX::cl"
+          elif [ "${{ matrix.config.compiler }}" = "clang" ]; then
+            echo "::set-env name=CC::clang"
+            echo "::set-env name=CXX::clang++"
+          else # gcc
+            echo "::set-env name=CC::gcc"
+            echo "::set-env name=CXX::g++"
+          fi
+        
       - name: Configure
-        env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cxx }}
         run: cmake -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}      
 
       - name: Build
