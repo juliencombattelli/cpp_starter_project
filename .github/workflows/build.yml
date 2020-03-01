@@ -10,23 +10,23 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - os: ubuntu-latest
-            name: Ubuntu GCC
-            compiler: gcc
-          - os: ubuntu-latest
-            name: Ubuntu Clang
-            compiler: clang
-          - os: macos-latest
-            name: MacOS Clang
-            compiler: clang
-          - os: windows-latest
-            name: Windows MSVC
-            compiler: cl
+          #- os: ubuntu-latest
+          #  name: Ubuntu GCC
+          #  compiler: gcc
+          #- os: ubuntu-latest
+          #  name: Ubuntu Clang
+          #  compiler: clang
+          #- os: macos-latest
+          #  name: MacOS Clang
+          #  compiler: clang
+          #- os: windows-latest
+          #  name: Windows MSVC
+          #  compiler: cl
           - os: windows-latest
             name: Windows MinGW
             compiler: gcc
-            extra_cmake_args: -G "MinGW Makefiles"
-        build_type: [Debug, Release]
+            extra_cmake_args: -G "MSYS Makefiles"
+        build_type: [Release]
     
     name: ${{ matrix.config.name }} - ${{ matrix.build_type }}
     
