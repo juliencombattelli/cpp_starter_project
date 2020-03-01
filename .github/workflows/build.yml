@@ -25,7 +25,7 @@ jobs:
           - os: windows-latest
             name: Windows MinGW
             compiler: gcc
-            extra-cmake-args: '-G "MinGW Makefiles"'          
+            extra-cmake-args: -G "MinGW Makefiles"
         build_type: [Debug, Release]
     
     name: ${{ matrix.config.name }} - ${{ matrix.build_type }}
