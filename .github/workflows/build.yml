@@ -53,6 +53,7 @@ jobs:
         run: ./.github/workflows/script/download_cmake_ninja.sh ${{ runner.os }}
 
       - name: Configure
+        shell: bash
         env:
           CC: ${{ matrix.config.cc }}
           CXX: ${{ matrix.config.cxx }}
