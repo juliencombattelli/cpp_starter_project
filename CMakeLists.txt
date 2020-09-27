@@ -1,65 +1,39 @@
-cmake_minimum_required(VERSION 3.16)
-project(myproject)
+cmake_minimum_required(VERSION 3.17.4)
+project(conan-test)
 
-option(ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
-option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
-option(ENABLE_DOXYGEN "Enable doxygen doc builds of source" OFF)
-option(ENABLE_IPO "Enable Iterprocedural Optimization, aka Link Time Optimization (LTO)" OFF)
-option(ENABLE_PCH "Enable Precompiled Headers" OFF)
-option(ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
-option(ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
-option(ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" OFF)
-option(ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
-option(ENABLE_TESTING "Enable Test Builds" ON)
-option(EXTRA_GCC_WARNINGS "Add extra GCC warnings not supported by Clang" OFF)
-option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" ON)
+set(CMAKE_MODULE_PATH 
+    ${CMAKE_SOURCE_DIR}/cmake/Scripts 
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules 
+    ${CMAKE_MODULE_PATH}
+)
 
-include(cmake/ProjectSettings.cmake)
-include(cmake/CompilerWarnings.cmake)
-include(cmake/PrecompiledHeaders.cmake)
-include(cmake/Sanitizers.cmake)
-include(cmake/StaticAnalyzers.cmake)
-include(cmake/Doxygen.cmake)
-include(cmake/Conan.cmake)
+include(Conan)
+include(Doxygen)
+include(InterproceduralOptimization)
+include(PrecompiledHeaders)
+include(Sanitizers)
+include(StaticAnalyzers)
+include(Warnings)
 
-enable_doxygen()
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_library(project_warnings INTERFACE)
-set_project_warnings(project_warnings)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
-add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_17)
-enable_sanitizers(project_options)
-enable_precompiled_headers(project_options)
-
-if (ENABLE_TESTING)
-    enable_testing()
-    include(GoogleTest)
-    add_subdirectory(test)
-endif()
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(math src/Math/Factorial.cpp)
 target_include_directories(math PUBLIC include)
-target_link_libraries(math 
-    PRIVATE 
-        project_options project_warnings
-)
+
+find_package(fmt REQUIRED)
+find_package(spdlog REQUIRED)
 
 add_executable(intro src/main.cpp)
-target_link_libraries(intro 
-    PRIVATE 
-        project_options project_warnings
-        CONAN_PKG::fmt CONAN_PKG::spdlog
-)
+target_link_libraries(intro PRIVATE fmt::fmt spdlog::spdlog)
 
-install(TARGETS intro
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-)
-
-install(TARGETS math
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-)
+if(BUILD_TEST)
+    add_subdirectory(test)
+endif()
