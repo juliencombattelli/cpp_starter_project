@@ -21,18 +21,38 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(math src/Math/Factorial.cpp)
 target_include_directories(math PUBLIC include)
+set_target_properties(math PROPERTIES PUBLIC_HEADER include/Math/Factorial.hpp)
+
+install(
+    TARGETS         math
+    RUNTIME         DESTINATION bin
+    LIBRARY         DESTINATION lib
+    ARCHIVE         DESTINATION lib
+    PUBLIC_HEADER   DESTINATION include/Math
+    PRIVATE_HEADER  DESTINATION include/Math
+)
 
 find_package(fmt REQUIRED)
 find_package(spdlog REQUIRED)
 
 add_executable(intro src/main.cpp)
 target_link_libraries(intro PRIVATE spdlog::spdlog fmt::fmt)
+
+install(
+    TARGETS         intro
+    RUNTIME         DESTINATION bin
+    LIBRARY         DESTINATION lib
+    ARCHIVE         DESTINATION lib
+)
 
 if(BUILD_TEST)
     add_subdirectory(test)
