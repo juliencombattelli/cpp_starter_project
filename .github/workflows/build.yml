@@ -67,20 +67,25 @@ jobs:
       
       - name: Configure
         run: |
+          source build/activate.sh
           cmake ${{ matrix.config.extra_cmake_args }} \
                 -S . -B build \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
                 -DUSE_CONAN=ON
       
       - name: Build
-        run: cmake --build build --config ${{ matrix.build_type }}
+        run: |
+          source build/activate.sh
+          cmake --build build --config ${{ matrix.build_type }}
       
       - name: Run tests
         working-directory: build
         run: ctest
       
       - name: Install Strip
-        run: cmake --install build --prefix instdir --strip
+        run: |
+          source build/activate.sh
+          cmake --install build --prefix instdir --strip
       
       - name: Upload
         uses: actions/upload-artifact@v1
