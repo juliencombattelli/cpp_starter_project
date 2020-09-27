@@ -28,10 +28,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(math src/Math/Factorial.cpp)
 target_include_directories(math PUBLIC include)
 
+find_package(fmt REQUIRED)
 find_package(spdlog REQUIRED)
 
 add_executable(intro src/main.cpp)
-target_link_libraries(intro PRIVATE spdlog::spdlog)
+target_link_libraries(intro PRIVATE spdlog::spdlog fmt::fmt)
 
 if(BUILD_TEST)
     add_subdirectory(test)
