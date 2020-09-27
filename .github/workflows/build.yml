@@ -67,7 +67,6 @@ jobs:
       
       - name: Configure
         run: |
-          source build/activate.sh
           cmake ${{ matrix.config.extra_cmake_args }} \
                 -S . -B build \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
@@ -75,7 +74,6 @@ jobs:
       
       - name: Build
         run: |
-          source build/activate.sh
           cmake --build build --config ${{ matrix.build_type }}
       
       - name: Run tests
@@ -84,7 +82,6 @@ jobs:
       
       - name: Install Strip
         run: |
-          source build/activate.sh
           cmake --install build --prefix instdir --strip
       
       - name: Upload
