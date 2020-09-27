@@ -40,7 +40,7 @@ jobs:
       
       - name: Checkout project
         uses: actions/checkout@v2
-      
+
       - name: Set up Python 3.x
         uses: actions/setup-python@v1
         with:
@@ -58,7 +58,7 @@ jobs:
           else: # gcc
             print("::set-env name=CC::gcc")
             print("::set-env name=CXX::g++")
-            print("::set-env name=CONAN_ENV_COMPILER_LIBCXX=::libstdc++11")
+            print("::set-env name=CONAN_ENV_COMPILER_LIBCXX::libstdc++11")
 
       - name: Install dependencies
         run: |
