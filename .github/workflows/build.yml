@@ -14,7 +14,6 @@ jobs:
             name: Ubuntu GCC
             artifact: ubuntu-gcc
             compiler: gcc
-            version: "10"
           - os: ubuntu-latest
             name: Ubuntu Clang
             artifact: ubuntu-clang
