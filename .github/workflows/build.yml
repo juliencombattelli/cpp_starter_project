@@ -66,10 +66,7 @@ jobs:
 
       - name: Configure
         run: |
-          cmake ${{ matrix.config.extra_cmake_args }} \
-                -S . -B build \
-                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DUSE_CONAN=ON
+          cmake ${{ matrix.config.extra_cmake_args }} -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DUSE_CONAN=ON
 
       - name: Build
         run: |
