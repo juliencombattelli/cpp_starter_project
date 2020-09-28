@@ -1,0 +1,42 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install dependencies",
+            "type": "shell",
+            "command": "conan install ${workspaceFolder} --build=missing -s compiler.libcxx=libstdc++11 -if ${workspaceFolder}/build",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Configure",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "command": "source activate.sh && cmake -S ${workspaceFolder} -B ${workspaceFolder}/build -DUSE_CONAN=ON",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "command": "source activate.sh && cmake --build .",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "command": "./bin/SFMLTest",
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}
