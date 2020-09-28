@@ -1,6 +1,26 @@
 option(USE_CONAN "ON if the dependencies are provided by Conan" OFF)
 if(USE_CONAN)
-    # TODO check if conan_paths.cmake exists
-    #      warn the user to run 'conan install' if necessary
-    include(${CMAKE_CURRENT_BINARY_DIR}/conan_paths.cmake)
+    if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+    message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+    file(DOWNLOAD 
+        "https://github.com/conan-io/cmake-conan/raw/v0.15/conan.cmake"
+        "${CMAKE_BINARY_DIR}/conan.cmake"
+    )
+    endif()
+
+    include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+    conan_add_remote(
+        NAME bincrafters 
+        URL https://api.bintray.com/conan/bincrafters/public-conan
+    )
+
+    conan_cmake_run(
+        CONANFILE conanfile.txt
+        BASIC_SETUP
+        BUILD missing
+        KEEP_RPATHS
+    )
+
+    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 endif()
