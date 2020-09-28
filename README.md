@@ -23,9 +23,10 @@ You can remove them with `git rm` and adjust the CMakeLists.txt:
 ## Dependencies
 
 Note about install commands: 
-- for Windows, we use [choco](https://chocolatey.org/install).
-- for MacOS, we use [brew](https://brew.sh/). 
-- In case of an error in cmake, make sure that the dependencies are on the PATH.
+- for Windows, you can use [choco](https://chocolatey.org/install).
+- for MacOS, you can use [brew](https://brew.sh/).
+- for Linux, prefer use your distribution package manager (like apt on Ubuntu).
+- In case of an error in CMake, make sure that the dependencies are on the PATH.
 
 ### Necessary Dependencies
 
