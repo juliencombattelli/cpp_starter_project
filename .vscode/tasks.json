@@ -2,19 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Install dependencies",
-            "type": "shell",
-            "command": "conan install ${workspaceFolder} --build=missing -s compiler.libcxx=libstdc++11 -if ${workspaceFolder}/build",
-            "group": "build",
-            "problemMatcher": []
-        },
-        {
             "label": "Configure",
             "type": "shell",
-            "options": {
-                "cwd": "${workspaceFolder}/build"
-            },
-            "command": "source activate.sh && cmake -S ${workspaceFolder} -B ${workspaceFolder}/build -DUSE_CONAN=ON",
+            "command": "cmake -S ${workspaceFolder} -B ${workspaceFolder}/build -DUSE_CONAN=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo",
             "group": "build",
             "problemMatcher": []
         },
@@ -24,17 +14,27 @@
             "options": {
                 "cwd": "${workspaceFolder}/build"
             },
-            "command": "source activate.sh && cmake --build .",
+            "command": "cmake --build . --config RelWithDebInfo",
             "group": "build",
             "problemMatcher": []
         },
         {
-            "label": "Run",
+            "label": "Run test",
             "type": "shell",
             "options": {
                 "cwd": "${workspaceFolder}/build"
             },
-            "command": "./bin/SFMLTest",
+            "command": "ctest",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run intro",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "command": "./bin/intro",
             "group": "build",
             "problemMatcher": []
         }
