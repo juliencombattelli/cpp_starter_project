@@ -13,6 +13,7 @@ include(InterproceduralOptimization)
 include(PrecompiledHeaders)
 include(Sanitizers)
 include(StaticAnalyzers)
+include(Testing)
 include(Warnings)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -20,9 +21,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
-
-# set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -54,6 +52,6 @@ install(
     ARCHIVE         DESTINATION lib
 )
 
-if(BUILD_TEST)
+if(ENABLE_TESTING)
     add_subdirectory(test)
 endif()
