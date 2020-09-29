@@ -70,7 +70,7 @@ with the CMake binary:
     
 The project provides many options you can pass to CMake. 
 If you want to use them, it is recommended to use one of the following alternatives.
-But if you really want to use the `cmake` command, you can use the -L and -H switches to list the options available and their help message.
+But if you really want to use the `cmake` command, you can use the -LH switch to list the options available and their help message.
 
 #### **Configure via ccmake**:
 with the CMake curses dialog command line tool:  
