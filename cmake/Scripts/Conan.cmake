@@ -18,6 +18,7 @@ if(USE_CONAN)
     conan_cmake_run(
         CONANFILE conanfile.txt
         BASIC_SETUP
+        BUILD_TYPE Release # Only use dependencies in Release mode
         BUILD missing
         KEEP_RPATHS
     )
